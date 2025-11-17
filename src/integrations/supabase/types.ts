@@ -14,15 +14,63 @@ export type Database = {
   }
   public: {
     Tables: {
+      activity_logs: {
+        Row: {
+          action_type: string
+          agency_id: string
+          client_id: string | null
+          created_at: string | null
+          description: string
+          id: string
+        }
+        Insert: {
+          action_type: string
+          agency_id: string
+          client_id?: string | null
+          created_at?: string | null
+          description: string
+          id?: string
+        }
+        Update: {
+          action_type?: string
+          agency_id?: string
+          client_id?: string | null
+          created_at?: string | null
+          description?: string
+          id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "activity_logs_agency_id_fkey"
+            columns: ["agency_id"]
+            isOneToOne: false
+            referencedRelation: "agencies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "activity_logs_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "clients"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       agencies: {
         Row: {
           contact_email: string
           created_at: string | null
           custom_domain: string | null
+          custom_email_domain: string | null
+          hide_powered_by: boolean | null
           id: string
           logo_url: string | null
+          max_clients: number | null
           name: string
+          onboarding_completed: boolean | null
+          plan_type: string | null
           primary_color: string | null
+          purchase_date: string | null
           secondary_color: string | null
           subdomain: string
         }
@@ -30,10 +78,16 @@ export type Database = {
           contact_email: string
           created_at?: string | null
           custom_domain?: string | null
+          custom_email_domain?: string | null
+          hide_powered_by?: boolean | null
           id?: string
           logo_url?: string | null
+          max_clients?: number | null
           name: string
+          onboarding_completed?: boolean | null
+          plan_type?: string | null
           primary_color?: string | null
+          purchase_date?: string | null
           secondary_color?: string | null
           subdomain: string
         }
@@ -41,10 +95,16 @@ export type Database = {
           contact_email?: string
           created_at?: string | null
           custom_domain?: string | null
+          custom_email_domain?: string | null
+          hide_powered_by?: boolean | null
           id?: string
           logo_url?: string | null
+          max_clients?: number | null
           name?: string
+          onboarding_completed?: boolean | null
+          plan_type?: string | null
           primary_color?: string | null
+          purchase_date?: string | null
           secondary_color?: string | null
           subdomain?: string
         }
@@ -137,6 +197,7 @@ export type Database = {
           estimated_api_cost: number | null
           featured_image_url: string | null
           focus_keyword: string | null
+          generated_by_client_name: string | null
           generation_params: Json | null
           id: string
           meta_description: string | null
@@ -162,6 +223,7 @@ export type Database = {
           estimated_api_cost?: number | null
           featured_image_url?: string | null
           focus_keyword?: string | null
+          generated_by_client_name?: string | null
           generation_params?: Json | null
           id?: string
           meta_description?: string | null
@@ -187,6 +249,7 @@ export type Database = {
           estimated_api_cost?: number | null
           featured_image_url?: string | null
           focus_keyword?: string | null
+          generated_by_client_name?: string | null
           generation_params?: Json | null
           id?: string
           meta_description?: string | null
