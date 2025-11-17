@@ -126,6 +126,53 @@ export type Database = {
           },
         ]
       }
+      wordpress_sites: {
+        Row: {
+          app_password: string
+          client_id: string
+          created_at: string | null
+          id: string
+          is_connected: boolean | null
+          last_sync: string | null
+          site_info: Json | null
+          site_name: string
+          site_url: string
+          username: string
+        }
+        Insert: {
+          app_password: string
+          client_id: string
+          created_at?: string | null
+          id?: string
+          is_connected?: boolean | null
+          last_sync?: string | null
+          site_info?: Json | null
+          site_name: string
+          site_url: string
+          username: string
+        }
+        Update: {
+          app_password?: string
+          client_id?: string
+          created_at?: string | null
+          id?: string
+          is_connected?: boolean | null
+          last_sync?: string | null
+          site_info?: Json | null
+          site_name?: string
+          site_url?: string
+          username?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "wordpress_sites_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "clients"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
