@@ -70,17 +70,19 @@ const ClientDashboard = () => {
               </Card>
             </Link>
 
-            <Card className="p-6 glass-effect hover:shadow-premium transition-all cursor-pointer">
-              <div className="flex items-center gap-4">
-                <div className="p-3 bg-secondary/10 rounded-lg">
-                  <Calendar className="h-6 w-6 text-secondary" />
+            <Link to="/gmb-posts">
+              <Card className="p-6 glass-effect hover:shadow-premium transition-all cursor-pointer">
+                <div className="flex items-center gap-4">
+                  <div className="p-3 bg-secondary/10 rounded-lg">
+                    <Calendar className="h-6 w-6 text-secondary" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold">GMB Posts</h3>
+                    <p className="text-sm text-muted-foreground">Manage Google Business posts</p>
+                  </div>
                 </div>
-                <div>
-                  <h3 className="font-semibold">View Calendar</h3>
-                  <p className="text-sm text-muted-foreground">Manage scheduled content</p>
-                </div>
-              </div>
-            </Card>
+              </Card>
+            </Link>
 
             <Link to="/settings/wordpress">
               <Card className="p-6 glass-effect hover:shadow-premium transition-all cursor-pointer">

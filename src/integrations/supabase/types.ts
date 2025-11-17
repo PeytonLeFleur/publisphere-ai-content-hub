@@ -128,18 +128,24 @@ export type Database = {
       }
       content_items: {
         Row: {
+          character_count: number | null
           client_id: string
           content: string
           created_at: string | null
+          cta_type: string | null
+          emoji_count: number | null
           estimated_api_cost: number | null
           featured_image_url: string | null
           focus_keyword: string | null
           generation_params: Json | null
           id: string
           meta_description: string | null
+          performance_clicks: number | null
+          performance_views: number | null
           published_at: string | null
           scheduled_for: string | null
           status: string
+          suggested_image_query: string | null
           title: string | null
           type: string
           updated_at: string | null
@@ -147,18 +153,24 @@ export type Database = {
           wordpress_site_id: string | null
         }
         Insert: {
+          character_count?: number | null
           client_id: string
           content: string
           created_at?: string | null
+          cta_type?: string | null
+          emoji_count?: number | null
           estimated_api_cost?: number | null
           featured_image_url?: string | null
           focus_keyword?: string | null
           generation_params?: Json | null
           id?: string
           meta_description?: string | null
+          performance_clicks?: number | null
+          performance_views?: number | null
           published_at?: string | null
           scheduled_for?: string | null
           status?: string
+          suggested_image_query?: string | null
           title?: string | null
           type: string
           updated_at?: string | null
@@ -166,18 +178,24 @@ export type Database = {
           wordpress_site_id?: string | null
         }
         Update: {
+          character_count?: number | null
           client_id?: string
           content?: string
           created_at?: string | null
+          cta_type?: string | null
+          emoji_count?: number | null
           estimated_api_cost?: number | null
           featured_image_url?: string | null
           focus_keyword?: string | null
           generation_params?: Json | null
           id?: string
           meta_description?: string | null
+          performance_clicks?: number | null
+          performance_views?: number | null
           published_at?: string | null
           scheduled_for?: string | null
           status?: string
+          suggested_image_query?: string | null
           title?: string | null
           type?: string
           updated_at?: string | null
