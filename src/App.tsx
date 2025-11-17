@@ -22,6 +22,9 @@ const NotificationSettings = lazy(() => import("./pages/NotificationSettings"));
 const Help = lazy(() => import("./pages/Help"));
 const ApiKeysSettings = lazy(() => import("./pages/ApiKeysSettings"));
 const WordPressSettings = lazy(() => import("./pages/WordPressSettings"));
+const Onboarding = lazy(() => import("./pages/Onboarding"));
+const Terms = lazy(() => import("./pages/Terms"));
+const Privacy = lazy(() => import("./pages/Privacy"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
 const queryClient = new QueryClient();
@@ -43,6 +46,7 @@ const App = () => (
           <Routes>
             <Route path="/" element={<Landing />} />
             <Route path="/signup/agency" element={<AgencySignup />} />
+            <Route path="/onboarding" element={<Onboarding />} />
             <Route path="/login" element={<ClientLogin />} />
             <Route path="/agency/dashboard" element={<AgencyDashboard />} />
             <Route path="/dashboard" element={<ClientDashboard />} />
@@ -58,6 +62,8 @@ const App = () => (
             <Route path="/settings/wordpress" element={<WordPressSettings />} />
             <Route path="/settings/notifications" element={<NotificationSettings />} />
             <Route path="/help" element={<Help />} />
+            <Route path="/terms" element={<Terms />} />
+            <Route path="/privacy" element={<Privacy />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
