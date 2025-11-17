@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.38.0";
+import { decrypt } from "../_shared/encryption.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -70,7 +71,9 @@ serve(async (req) => {
       throw new Error('WordPress site is not connected');
     }
 
-    const credentials = btoa(`${wpSite.username}:${wpSite.app_password}`);
+    // Decrypt password before use
+    const decryptedPassword = await decrypt(wpSite.app_password);
+    const credentials = btoa(`${wpSite.username}:${decryptedPassword}`);
     let featuredMediaId: number | undefined;
 
     // Upload featured image if provided

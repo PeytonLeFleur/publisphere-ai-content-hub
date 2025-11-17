@@ -16,11 +16,17 @@ const AgencySignup = () => {
     agencyName: "",
     contactEmail: "",
     password: "",
-    subdomain: ""
+    subdomain: "",
+    promoCode: ""
   });
   const [isChecking, setIsChecking] = useState(false);
   const [subdomainAvailable, setSubdomainAvailable] = useState<boolean | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [promoStatus, setPromoStatus] = useState<{
+    valid: boolean | null;
+    message: string;
+    type?: string;
+  }>({ valid: null, message: "" });
 
   const checkSubdomain = async (subdomain: string) => {
     if (!subdomain || subdomain.length < 3) {
@@ -58,9 +64,58 @@ const AgencySignup = () => {
     }
   };
 
+  const validatePromoCode = async (code: string) => {
+    if (!code || code.trim().length === 0) {
+      setPromoStatus({ valid: null, message: "" });
+      return;
+    }
+
+    try {
+      const { data, error } = await supabase.rpc('validate_promo_code', {
+        promo_code_input: code
+      });
+
+      if (error) {
+        console.error('Promo validation error:', error);
+        setPromoStatus({ valid: false, message: "Failed to validate code" });
+        return;
+      }
+
+      if (data && data.length > 0) {
+        const result = data[0];
+        setPromoStatus({
+          valid: result.is_valid,
+          message: result.is_valid
+            ? result.discount_type === 'free'
+              ? "✓ Free access - No payment required!"
+              : result.discount_type === 'percentage'
+              ? `✓ ${result.discount_value}% discount applied`
+              : `✓ $${result.discount_value} discount applied`
+            : result.message,
+          type: result.discount_type
+        });
+      }
+    } catch (error) {
+      console.error('Promo validation error:', error);
+      setPromoStatus({ valid: false, message: "Invalid promo code" });
+    }
+  };
+
+  const handlePromoCodeChange = (value: string) => {
+    const cleaned = value.toUpperCase().replace(/[^A-Z0-9]/g, '');
+    setFormData({ ...formData, promoCode: cleaned });
+
+    if (cleaned.length >= 3) {
+      const timeoutId = setTimeout(() => validatePromoCode(cleaned), 500);
+      return () => clearTimeout(timeoutId);
+    } else {
+      setPromoStatus({ valid: null, message: "" });
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!subdomainAvailable) {
       toast({
         title: "Subdomain unavailable",
@@ -72,17 +127,56 @@ const AgencySignup = () => {
 
     setIsSubmitting(true);
     try {
-      // In a real implementation, this would call an edge function
-      // to create the agency with proper password hashing
-      toast({
-        title: "Account created!",
-        description: "Please check your email to verify your account.",
+      // Call the agency-signup edge function
+      const { data: functionData, error: functionError } = await supabase.functions.invoke('agency-signup', {
+        body: {
+          agencyName: formData.agencyName,
+          contactEmail: formData.contactEmail,
+          password: formData.password,
+          subdomain: formData.subdomain,
+          promoCode: formData.promoCode || undefined,
+        }
       });
-      navigate('/agency/dashboard');
-    } catch (error) {
+
+      if (functionError) {
+        throw new Error(functionError.message);
+      }
+
+      if (!functionData.success) {
+        throw new Error(functionData.error || 'Failed to create account');
+      }
+
+      // Now sign in the user
+      const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({
+        email: formData.contactEmail,
+        password: formData.password,
+      });
+
+      if (signInError) {
+        throw new Error('Account created but login failed. Please try logging in.');
+      }
+
+      const paymentRequired = functionData.requiresPayment;
+
+      toast({
+        title: "Success!",
+        description: paymentRequired
+          ? `Account created! Please complete payment.`
+          : `Welcome to Publisphere, ${formData.agencyName}! Free access granted.`,
+      });
+
+      // Redirect based on payment status
+      if (paymentRequired) {
+        // TODO: Redirect to payment page
+        navigate('/onboarding?payment=pending');
+      } else {
+        navigate('/onboarding');
+      }
+    } catch (error: any) {
+      console.error('Signup error:', error);
       toast({
         title: "Error",
-        description: "Failed to create account. Please try again.",
+        description: error.message || "Failed to create account. Please try again.",
         variant: "destructive"
       });
     } finally {
@@ -98,7 +192,7 @@ const AgencySignup = () => {
         <Card className="p-8 shadow-premium">
           <div className="text-center mb-8">
             <div className="flex items-center justify-center gap-2 mb-4">
-              <Zap className="h-8 w-8 text-primary" />
+              <Zap className="h-8 w-8 text-foreground" />
               <h1 className="text-3xl font-bold">Create Your Agency</h1>
             </div>
             <p className="text-muted-foreground">
@@ -159,7 +253,7 @@ const AgencySignup = () => {
                 />
                 {isChecking && <div className="text-muted-foreground text-sm">Checking...</div>}
                 {subdomainAvailable === true && (
-                  <CheckCircle2 className="h-5 w-5 text-secondary" />
+                  <CheckCircle2 className="h-5 w-5 text-foreground" />
                 )}
                 {subdomainAvailable === false && (
                   <div className="text-destructive text-sm">Taken</div>
@@ -174,13 +268,43 @@ const AgencySignup = () => {
               )}
             </div>
 
-            <Button 
-              type="submit" 
-              className="w-full" 
+            <div className="space-y-2">
+              <Label htmlFor="promoCode">Promo Code (Optional)</Label>
+              <Input
+                id="promoCode"
+                type="text"
+                placeholder="Enter promo code"
+                value={formData.promoCode}
+                onChange={(e) => handlePromoCodeChange(e.target.value)}
+                className="uppercase"
+              />
+              {promoStatus.message && (
+                <p className={`text-sm ${
+                  promoStatus.valid === true
+                    ? 'text-foreground font-medium'
+                    : promoStatus.valid === false
+                    ? 'text-destructive'
+                    : 'text-muted-foreground'
+                }`}>
+                  {promoStatus.message}
+                </p>
+              )}
+              {promoStatus.type === 'free' && (
+                <div className="p-3 bg-foreground/5 border border-foreground/10 rounded-lg">
+                  <p className="text-sm font-medium">
+                    🎉 No credit card required - Get instant free access!
+                  </p>
+                </div>
+              )}
+            </div>
+
+            <Button
+              type="submit"
+              className="w-full"
               size="lg"
               disabled={isSubmitting || !subdomainAvailable}
             >
-              {isSubmitting ? "Creating Account..." : "Create Agency Account"}
+              {isSubmitting ? "Creating Account..." : promoStatus.type === 'free' ? "Create Free Account" : "Create Agency Account"}
             </Button>
           </form>
 

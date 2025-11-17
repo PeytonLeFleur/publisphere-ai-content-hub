@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.38.0";
+import { decrypt } from "../_shared/encryption.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -51,7 +52,8 @@ serve(async (req) => {
       throw new Error('Please configure your Anthropic API key in Settings → API Keys');
     }
 
-    const anthropicKey = apiKey.encrypted_key; // TODO: Decrypt in production
+    // Decrypt the API key before use
+    const anthropicKey = await decrypt(apiKey.encrypted_key);
 
     if (action === 'generate_outline') {
       const outline = await generateBlogOutline(anthropicKey, params);

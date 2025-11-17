@@ -4,12 +4,16 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { lazy, Suspense } from "react";
+import { AgencyBrandingProvider } from "@/contexts/AgencyBrandingContext";
+import { CommandPalette } from "@/components/CommandPalette";
 
 const Landing = lazy(() => import("./pages/Landing"));
 const AgencySignup = lazy(() => import("./pages/AgencySignup"));
 const ClientLogin = lazy(() => import("./pages/ClientLogin"));
 const AgencyDashboard = lazy(() => import("./pages/AgencyDashboard"));
 const ClientDashboard = lazy(() => import("./pages/ClientDashboard"));
+const ClientManagement = lazy(() => import("./pages/ClientManagement"));
+const ContentGenerator = lazy(() => import("./pages/ContentGenerator"));
 const ContentGeneration = lazy(() => import("./pages/ContentGeneration"));
 const ContentLibrary = lazy(() => import("./pages/ContentLibrary"));
 const ContentDetail = lazy(() => import("./pages/ContentDetail"));
@@ -35,10 +39,12 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
+        <AgencyBrandingProvider>
+          <CommandPalette />
         <Suspense fallback={
           <div className="flex items-center justify-center min-h-screen">
             <div className="text-center">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
+              <div className="skeleton h-12 w-12 rounded-full mx-auto"></div>
               <p className="mt-4 text-muted-foreground">Loading...</p>
             </div>
           </div>
@@ -50,7 +56,8 @@ const App = () => (
             <Route path="/login" element={<ClientLogin />} />
             <Route path="/agency/dashboard" element={<AgencyDashboard />} />
             <Route path="/dashboard" element={<ClientDashboard />} />
-            <Route path="/generate" element={<ContentGeneration />} />
+            <Route path="/clients" element={<ClientManagement />} />
+            <Route path="/generate" element={<ContentGenerator />} />
             <Route path="/content" element={<ContentLibrary />} />
             <Route path="/content/:id" element={<ContentDetail />} />
             <Route path="/calendar" element={<ContentCalendar />} />
@@ -68,6 +75,7 @@ const App = () => (
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Suspense>
+        </AgencyBrandingProvider>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>

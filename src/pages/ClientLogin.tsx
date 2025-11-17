@@ -6,18 +6,21 @@ import { Label } from "@/components/ui/label";
 import { Card } from "@/components/ui/card";
 import { Navbar } from "@/components/Navbar";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
+import { useAgencyBranding } from "@/contexts/AgencyBrandingContext";
 
 const ClientLogin = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { branding, loading: brandingLoading } = useAgencyBranding();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // In a real implementation, this would detect subdomain and load agency branding
-  const agencyBranding = {
-    name: "Demo Agency",
-    primary_color: "#3B82F6"
+  const agencyBranding = branding || {
+    name: "Publisphere",
+    primary_color: "#3B82F6",
+    logo_url: null,
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -25,17 +28,59 @@ const ClientLogin = () => {
     setIsSubmitting(true);
 
     try {
-      // In a real implementation, this would call an edge function
-      // to authenticate the client
-      toast({
-        title: "Welcome back!",
-        description: "Successfully logged in.",
+      // Authenticate with Supabase Auth
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
       });
-      navigate('/dashboard');
-    } catch (error) {
+
+      if (error) {
+        throw error;
+      }
+
+      // Check if this user is a client or agency
+      const { data: client, error: clientError } = await supabase
+        .from('clients')
+        .select('id, business_name, agency_id, is_active')
+        .eq('email', email.toLowerCase())
+        .maybeSingle();
+
+      if (client) {
+        // This is a client
+        if (!client.is_active) {
+          await supabase.auth.signOut();
+          throw new Error('Your account has been deactivated. Please contact your agency.');
+        }
+
+        toast({
+          title: "Welcome back!",
+          description: `Logged in as ${client.business_name}`,
+        });
+        navigate('/dashboard');
+      } else {
+        // Check if this is an agency
+        const { data: agency } = await supabase
+          .from('agencies')
+          .select('id, name')
+          .eq('contact_email', email.toLowerCase())
+          .maybeSingle();
+
+        if (agency) {
+          toast({
+            title: "Welcome back!",
+            description: `Logged in as ${agency.name}`,
+          });
+          navigate('/agency/dashboard');
+        } else {
+          await supabase.auth.signOut();
+          throw new Error('Account not found. Please contact support.');
+        }
+      }
+    } catch (error: any) {
+      console.error('Login error:', error);
       toast({
         title: "Error",
-        description: "Invalid email or password.",
+        description: error.message || "Invalid email or password.",
         variant: "destructive"
       });
     } finally {
@@ -46,10 +91,17 @@ const ClientLogin = () => {
   return (
     <div className="min-h-screen bg-background">
       <Navbar agencyBranding={agencyBranding} />
-      
+
       <div className="container mx-auto px-4 py-12 max-w-md">
         <Card className="p-8 shadow-premium">
           <div className="text-center mb-8">
+            {agencyBranding.logo_url && (
+              <img
+                src={agencyBranding.logo_url}
+                alt={agencyBranding.name}
+                className="h-16 mx-auto mb-4 object-contain"
+              />
+            )}
             <h1 className="text-3xl font-bold mb-2">Welcome Back</h1>
             <p className="text-muted-foreground">
               Sign in to {agencyBranding.name}

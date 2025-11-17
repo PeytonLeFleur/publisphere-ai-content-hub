@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.38.0";
+import { encrypt, decrypt } from "../_shared/encryption.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -104,8 +105,8 @@ serve(async (req) => {
       const categories = await categoriesResponse.json();
       const tags = await tagsResponse.json();
 
-      // Encrypt the app password (in production, use proper encryption)
-      const encryptedPassword = app_password; // TODO: Implement AES-256 encryption
+      // Encrypt the app password before storing
+      const encryptedPassword = await encrypt(app_password);
 
       // Save to database
       const { data: wpSite, error: insertError } = await supabaseClient
@@ -160,8 +161,9 @@ serve(async (req) => {
         throw new Error('WordPress site not found');
       }
 
-      // Decrypt password (TODO: Implement decryption)
-      const credentials = btoa(`${wpSite.username}:${wpSite.app_password}`);
+      // Decrypt password before use
+      const decryptedPassword = await decrypt(wpSite.app_password);
+      const credentials = btoa(`${wpSite.username}:${decryptedPassword}`);
 
       // Fetch updated site info
       const siteInfoResponse = await fetch(`${wpSite.site_url}/wp-json`, {
