@@ -9,7 +9,9 @@ import {
   Globe,
   MessageSquare,
   Settings,
-  HelpCircle
+  HelpCircle,
+  RefreshCw,
+  Clock
 } from "lucide-react";
 
 interface ClientLayoutProps {
@@ -26,6 +28,8 @@ const navigation = [
   { name: "Generate Content", href: "/generate", icon: Sparkles },
   { name: "Content Library", href: "/content", icon: FolderOpen },
   { name: "Calendar", href: "/calendar", icon: CalendarIcon },
+  { name: "Automation", href: "/automation", icon: RefreshCw },
+  { name: "Job Logs", href: "/jobs", icon: Clock },
   { name: "WordPress Sites", href: "/settings/wordpress", icon: Globe },
   { name: "GMB Posts", href: "/gmb-posts", icon: MessageSquare },
   { name: "Settings", href: "/settings", icon: Settings },
