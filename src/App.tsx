@@ -14,8 +14,11 @@ const ContentGeneration = lazy(() => import("./pages/ContentGeneration"));
 const ContentLibrary = lazy(() => import("./pages/ContentLibrary"));
 const ContentDetail = lazy(() => import("./pages/ContentDetail"));
 const ContentCalendar = lazy(() => import("./pages/ContentCalendar"));
+const Automation = lazy(() => import("./pages/Automation"));
+const JobLogs = lazy(() => import("./pages/JobLogs"));
 const GMBPosts = lazy(() => import("./pages/GMBPosts"));
 const Settings = lazy(() => import("./pages/Settings"));
+const NotificationSettings = lazy(() => import("./pages/NotificationSettings"));
 const Help = lazy(() => import("./pages/Help"));
 const ApiKeysSettings = lazy(() => import("./pages/ApiKeysSettings"));
 const WordPressSettings = lazy(() => import("./pages/WordPressSettings"));
@@ -47,10 +50,13 @@ const App = () => (
             <Route path="/content" element={<ContentLibrary />} />
             <Route path="/content/:id" element={<ContentDetail />} />
             <Route path="/calendar" element={<ContentCalendar />} />
+            <Route path="/automation" element={<Automation />} />
+            <Route path="/jobs" element={<JobLogs />} />
             <Route path="/gmb-posts" element={<GMBPosts />} />
             <Route path="/settings" element={<Settings />} />
             <Route path="/settings/api-keys" element={<ApiKeysSettings />} />
             <Route path="/settings/wordpress" element={<WordPressSettings />} />
+            <Route path="/settings/notifications" element={<NotificationSettings />} />
             <Route path="/help" element={<Help />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />

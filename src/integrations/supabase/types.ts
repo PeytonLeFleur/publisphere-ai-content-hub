@@ -148,6 +148,56 @@ export type Database = {
           },
         ]
       }
+      automation_rules: {
+        Row: {
+          client_id: string
+          content_config: Json | null
+          created_at: string
+          frequency: string | null
+          frequency_config: Json | null
+          id: string
+          is_active: boolean
+          last_run: string | null
+          next_run: string | null
+          rule_name: string
+          rule_type: string
+        }
+        Insert: {
+          client_id: string
+          content_config?: Json | null
+          created_at?: string
+          frequency?: string | null
+          frequency_config?: Json | null
+          id?: string
+          is_active?: boolean
+          last_run?: string | null
+          next_run?: string | null
+          rule_name: string
+          rule_type: string
+        }
+        Update: {
+          client_id?: string
+          content_config?: Json | null
+          created_at?: string
+          frequency?: string | null
+          frequency_config?: Json | null
+          id?: string
+          is_active?: boolean
+          last_run?: string | null
+          next_run?: string | null
+          rule_name?: string
+          rule_type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "automation_rules_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "clients"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       clients: {
         Row: {
           agency_id: string
@@ -322,6 +372,69 @@ export type Database = {
             columns: ["client_id"]
             isOneToOne: false
             referencedRelation: "clients"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      jobs: {
+        Row: {
+          attempts: number
+          client_id: string
+          completed_at: string | null
+          content_item_id: string | null
+          created_at: string
+          error_message: string | null
+          id: string
+          job_data: Json | null
+          job_type: string
+          max_attempts: number
+          scheduled_for: string
+          started_at: string | null
+          status: string
+        }
+        Insert: {
+          attempts?: number
+          client_id: string
+          completed_at?: string | null
+          content_item_id?: string | null
+          created_at?: string
+          error_message?: string | null
+          id?: string
+          job_data?: Json | null
+          job_type: string
+          max_attempts?: number
+          scheduled_for: string
+          started_at?: string | null
+          status?: string
+        }
+        Update: {
+          attempts?: number
+          client_id?: string
+          completed_at?: string | null
+          content_item_id?: string | null
+          created_at?: string
+          error_message?: string | null
+          id?: string
+          job_data?: Json | null
+          job_type?: string
+          max_attempts?: number
+          scheduled_for?: string
+          started_at?: string | null
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "jobs_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "clients"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "jobs_content_item_id_fkey"
+            columns: ["content_item_id"]
+            isOneToOne: false
+            referencedRelation: "content_items"
             referencedColumns: ["id"]
           },
         ]
