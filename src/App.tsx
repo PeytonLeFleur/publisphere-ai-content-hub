@@ -14,6 +14,7 @@ const ClientDashboard = lazy(() => import("./pages/ClientDashboard"));
 const ApiKeysSettings = lazy(() => import("./pages/ApiKeysSettings"));
 const WordPressSettings = lazy(() => import("./pages/WordPressSettings"));
 const ContentGeneration = lazy(() => import("./pages/ContentGeneration"));
+const GMBPosts = lazy(() => import("./pages/GMBPosts"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
 const queryClient = new QueryClient();
@@ -39,6 +40,7 @@ const App = () => (
             <Route path="/agency/dashboard" element={<AgencyDashboard />} />
             <Route path="/dashboard" element={<ClientDashboard />} />
             <Route path="/generate" element={<ContentGeneration />} />
+            <Route path="/gmb-posts" element={<GMBPosts />} />
             <Route path="/settings/api-keys" element={<ApiKeysSettings />} />
             <Route path="/settings/wordpress" element={<WordPressSettings />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

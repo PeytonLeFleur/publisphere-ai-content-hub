@@ -100,9 +100,13 @@ serve(async (req) => {
           .insert({
             client_id: client.id,
             type: 'gmb_post',
-            content: content.text,
+            content: content.content,
             status: 'draft',
             generation_params: params,
+            character_count: content.character_count,
+            emoji_count: content.emoji_count,
+            cta_type: params.ctaButton,
+            suggested_image_query: content.suggested_image_query,
           })
           .select()
           .single();
@@ -249,23 +253,42 @@ Return the response in this JSON format:
 }
 
 async function generateGmbPost(apiKey: string, params: any): Promise<any> {
-  const emojiInstruction = params.includeEmoji ? 'Include relevant emoji to make it engaging.' : 'Do not use emoji.';
+  const tone = params.tone || 'friendly';
+  const postType = params.postType || 'whats_new';
+  const ctaType = params.ctaButton || 'learn_more';
+  const includeEmojis = params.includeEmoji !== false;
   
-  const prompt = `Create a Google My Business post with these details:
+  let postTypeInstructions = '';
+  if (postType === 'event') {
+    postTypeInstructions = '\n- Include clear event date and time placeholder: [DATE] [TIME]\n- Remind about location';
+  } else if (postType === 'offer') {
+    postTypeInstructions = '\n- Include specific offer details\n- Add urgency/scarcity if appropriate\n- Include expiration reminder';
+  }
+  
+  const prompt = `Generate a Google My Business post for a local business.
 
 Topic: ${params.topic}
-Post Type: ${params.postType}
-CTA Button: ${params.ctaButton}
-${emojiInstruction}
+Post Type: ${postType}
+CTA: ${ctaType}
+Tone: ${tone}
+Include emojis: ${includeEmojis}
 
 Requirements:
-- Keep it under 300 characters
-- Make it engaging and action-oriented
-- ${params.postType === 'offer' ? 'Highlight the value proposition' : ''}
-- ${params.postType === 'event' ? 'Include time and date placeholder' : ''}
-- End with a strong call-to-action matching the CTA button type
+- 300-1200 characters (optimal length)
+- Engaging and action-oriented
+- Include 2-4 relevant emojis if requested
+- Natural, conversational tone
+- Strong call-to-action
+- Local business friendly
+- NO hashtags (GMB doesn't use them)${postTypeInstructions}
 
-Return ONLY the post text, nothing else.`;
+Return JSON with this exact structure:
+{
+  "content": "post text with emojis",
+  "character_count": number,
+  "emoji_count": number,
+  "suggested_image_query": "keyword for image search"
+}`;
 
   const response = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
@@ -276,7 +299,7 @@ Return ONLY the post text, nothing else.`;
     },
     body: JSON.stringify({
       model: 'claude-sonnet-4-5',
-      max_tokens: 500,
+      max_tokens: 1024,
       messages: [{
         role: 'user',
         content: prompt
@@ -285,12 +308,27 @@ Return ONLY the post text, nothing else.`;
   });
 
   if (!response.ok) {
-    throw new Error('Failed to generate GMB post with Anthropic API');
+    if (response.status === 401) throw new Error('Invalid Anthropic API key');
+    if (response.status === 429) throw new Error('API rate limit reached. Please wait a moment and try again.');
+    if (response.status === 402) throw new Error('Insufficient credits in your Anthropic account');
+    throw new Error('Failed to generate GMB post');
   }
 
   const data = await response.json();
-  return {
-    text: data.content[0].text,
-    html: `<p>${data.content[0].text}</p>`
-  };
+  const content = data.content[0].text;
+  
+  let parsedContent;
+  try {
+    const cleanContent = content.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
+    parsedContent = JSON.parse(cleanContent);
+  } catch (e) {
+    parsedContent = {
+      content: content,
+      character_count: content.length,
+      emoji_count: (content.match(/[\u{1F300}-\u{1F9FF}]/gu) || []).length,
+      suggested_image_query: params.topic
+    };
+  }
+  
+  return parsedContent;
 }
