@@ -126,6 +126,125 @@ export type Database = {
           },
         ]
       }
+      content_items: {
+        Row: {
+          client_id: string
+          content: string
+          created_at: string | null
+          estimated_api_cost: number | null
+          featured_image_url: string | null
+          focus_keyword: string | null
+          generation_params: Json | null
+          id: string
+          meta_description: string | null
+          published_at: string | null
+          scheduled_for: string | null
+          status: string
+          title: string | null
+          type: string
+          updated_at: string | null
+          wordpress_post_id: number | null
+          wordpress_site_id: string | null
+        }
+        Insert: {
+          client_id: string
+          content: string
+          created_at?: string | null
+          estimated_api_cost?: number | null
+          featured_image_url?: string | null
+          focus_keyword?: string | null
+          generation_params?: Json | null
+          id?: string
+          meta_description?: string | null
+          published_at?: string | null
+          scheduled_for?: string | null
+          status?: string
+          title?: string | null
+          type: string
+          updated_at?: string | null
+          wordpress_post_id?: number | null
+          wordpress_site_id?: string | null
+        }
+        Update: {
+          client_id?: string
+          content?: string
+          created_at?: string | null
+          estimated_api_cost?: number | null
+          featured_image_url?: string | null
+          focus_keyword?: string | null
+          generation_params?: Json | null
+          id?: string
+          meta_description?: string | null
+          published_at?: string | null
+          scheduled_for?: string | null
+          status?: string
+          title?: string | null
+          type?: string
+          updated_at?: string | null
+          wordpress_post_id?: number | null
+          wordpress_site_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "content_items_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "clients"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "content_items_wordpress_site_id_fkey"
+            columns: ["wordpress_site_id"]
+            isOneToOne: false
+            referencedRelation: "wordpress_sites"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      generation_templates: {
+        Row: {
+          client_id: string
+          created_at: string | null
+          custom_instructions: string | null
+          default_tone: string | null
+          id: string
+          sample_content: string | null
+          target_audience: string | null
+          template_name: string
+          template_type: string
+        }
+        Insert: {
+          client_id: string
+          created_at?: string | null
+          custom_instructions?: string | null
+          default_tone?: string | null
+          id?: string
+          sample_content?: string | null
+          target_audience?: string | null
+          template_name: string
+          template_type: string
+        }
+        Update: {
+          client_id?: string
+          created_at?: string | null
+          custom_instructions?: string | null
+          default_tone?: string | null
+          id?: string
+          sample_content?: string | null
+          target_audience?: string | null
+          template_name?: string
+          template_type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "generation_templates_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "clients"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       wordpress_sites: {
         Row: {
           app_password: string
