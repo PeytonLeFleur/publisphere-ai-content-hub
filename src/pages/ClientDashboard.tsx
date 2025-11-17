@@ -80,15 +80,15 @@ const ClientDashboard = () => {
               </div>
             </Card>
 
-            <Link to="/settings/api-keys">
+            <Link to="/settings/wordpress">
               <Card className="p-6 glass-effect hover:shadow-premium transition-all cursor-pointer">
                 <div className="flex items-center gap-4">
                   <div className="p-3 bg-accent/10 rounded-lg">
                     <Settings className="h-6 w-6 text-accent" />
                   </div>
                   <div>
-                    <h3 className="font-semibold">API Settings</h3>
-                    <p className="text-sm text-muted-foreground">Manage your API keys</p>
+                    <h3 className="font-semibold">WordPress</h3>
+                    <p className="text-sm text-muted-foreground">Connect WordPress sites</p>
                   </div>
                 </div>
               </Card>

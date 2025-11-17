@@ -1,1 +1,7 @@
 project_id = "smmkrslzlvromjkaoelt"
+
+[functions.wordpress-connect]
+verify_jwt = true
+
+[functions.wordpress-publish]
+verify_jwt = true
