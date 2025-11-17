@@ -56,17 +56,19 @@ const ClientDashboard = () => {
         <div className="mb-8">
           <h2 className="text-2xl font-semibold mb-4">Quick Actions</h2>
           <div className="grid md:grid-cols-3 gap-4">
-            <Card className="p-6 glass-effect hover:shadow-premium transition-all cursor-pointer">
-              <div className="flex items-center gap-4">
-                <div className="p-3 bg-primary/10 rounded-lg">
-                  <Sparkles className="h-6 w-6 text-primary" />
+            <Link to="/generate">
+              <Card className="p-6 glass-effect hover:shadow-premium transition-all cursor-pointer">
+                <div className="flex items-center gap-4">
+                  <div className="p-3 bg-primary/10 rounded-lg">
+                    <Sparkles className="h-6 w-6 text-primary" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold">Generate Content</h3>
+                    <p className="text-sm text-muted-foreground">Create new articles and posts</p>
+                  </div>
                 </div>
-                <div>
-                  <h3 className="font-semibold">Generate Content</h3>
-                  <p className="text-sm text-muted-foreground">Create new articles and posts</p>
-                </div>
-              </div>
-            </Card>
+              </Card>
+            </Link>
 
             <Card className="p-6 glass-effect hover:shadow-premium transition-all cursor-pointer">
               <div className="flex items-center gap-4">
