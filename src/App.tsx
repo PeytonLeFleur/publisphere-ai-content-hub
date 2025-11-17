@@ -11,6 +11,7 @@ const Landing = lazy(() => import("./pages/Landing"));
 const AgencySignup = lazy(() => import("./pages/AgencySignup"));
 const ClientLogin = lazy(() => import("./pages/ClientLogin"));
 const AgencyDashboard = lazy(() => import("./pages/AgencyDashboard"));
+const AgencyBilling = lazy(() => import("./pages/AgencyBilling"));
 const ClientDashboard = lazy(() => import("./pages/ClientDashboard"));
 const ClientManagement = lazy(() => import("./pages/ClientManagement"));
 const ContentGenerator = lazy(() => import("./pages/ContentGenerator"));
@@ -55,6 +56,7 @@ const App = () => (
             <Route path="/onboarding" element={<Onboarding />} />
             <Route path="/login" element={<ClientLogin />} />
             <Route path="/agency/dashboard" element={<AgencyDashboard />} />
+            <Route path="/agency/billing" element={<AgencyBilling />} />
             <Route path="/dashboard" element={<ClientDashboard />} />
             <Route path="/clients" element={<ClientManagement />} />
             <Route path="/generate" element={<ContentGenerator />} />
