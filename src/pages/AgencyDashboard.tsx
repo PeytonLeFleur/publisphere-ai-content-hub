@@ -10,7 +10,9 @@ import {
   Clock,
   CheckCircle2,
   ArrowRight,
-  Zap
+  Zap,
+  Bot,
+  Package
 } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -345,7 +347,7 @@ const AgencyDashboard = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5 }}
-          className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6"
+          className="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6"
         >
           <Card className="card-premium p-6 cursor-pointer" onClick={() => navigate("/generate")}>
             <div className="flex items-start gap-4">
@@ -377,7 +379,7 @@ const AgencyDashboard = () => {
             </div>
           </Card>
 
-          <Card className="card-premium p-6 cursor-pointer" onClick={() => navigate("/schedule")}>
+          <Card className="card-premium p-6 cursor-pointer" onClick={() => navigate("/calendar")}>
             <div className="flex items-start gap-4">
               <div className="p-3 bg-foreground/5 border border-foreground/10 rounded-lg">
                 <Calendar className="h-6 w-6 text-foreground" />
@@ -386,6 +388,36 @@ const AgencyDashboard = () => {
                 <h3 className="font-semibold mb-1">Schedule Posts</h3>
                 <p className="text-sm text-muted-foreground">
                   Plan and schedule your content calendar
+                </p>
+              </div>
+              <ArrowRight className="h-5 w-5 text-muted-foreground group-hover:translate-x-1 transition-transform" />
+            </div>
+          </Card>
+
+          <Card className="card-premium p-6 cursor-pointer" onClick={() => navigate("/voice-agents")}>
+            <div className="flex items-start gap-4">
+              <div className="p-3 bg-foreground/5 border border-foreground/10 rounded-lg">
+                <Bot className="h-6 w-6 text-foreground" />
+              </div>
+              <div className="flex-1">
+                <h3 className="font-semibold mb-1">Voice Agents</h3>
+                <p className="text-sm text-muted-foreground">
+                  Manage AI voice agents for clients
+                </p>
+              </div>
+              <ArrowRight className="h-5 w-5 text-muted-foreground group-hover:translate-x-1 transition-transform" />
+            </div>
+          </Card>
+
+          <Card className="card-premium p-6 cursor-pointer" onClick={() => navigate("/service-packages")}>
+            <div className="flex items-start gap-4">
+              <div className="p-3 bg-foreground/5 border border-foreground/10 rounded-lg">
+                <Package className="h-6 w-6 text-foreground" />
+              </div>
+              <div className="flex-1">
+                <h3 className="font-semibold mb-1">Service Packages</h3>
+                <p className="text-sm text-muted-foreground">
+                  Create and manage pricing packages
                 </p>
               </div>
               <ArrowRight className="h-5 w-5 text-muted-foreground group-hover:translate-x-1 transition-transform" />

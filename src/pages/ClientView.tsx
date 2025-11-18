@@ -17,6 +17,7 @@ import {
   FileText,
   Calendar,
   DollarSign,
+  Bot,
 } from "lucide-react";
 import { fadeInUp } from "@/lib/animations";
 
@@ -332,6 +333,14 @@ const ClientView = () => {
               <Card className="p-6">
                 <h3 className="font-semibold mb-4">Quick Actions</h3>
                 <div className="space-y-2">
+                  <Button
+                    variant="outline"
+                    className="w-full justify-start gap-2"
+                    onClick={() => navigate(`/clients/${id}/voice-agents`)}
+                  >
+                    <Bot className="h-4 w-4" />
+                    Manage Voice Agents
+                  </Button>
                   <Button
                     variant="outline"
                     className="w-full justify-start gap-2"
