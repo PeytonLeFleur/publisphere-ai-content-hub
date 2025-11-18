@@ -85,12 +85,12 @@ const AgencyBilling = () => {
       if (agency?.stripe_onboarding_completed) {
         setStripeConnected(true);
 
-        // Load subscription plans
+        // Load subscription plans with counts
         const { data: plansData } = await supabase
           .from('subscription_plans')
           .select(`
             *,
-            client_subscriptions!subscription_plans_id_fkey (
+            client_subscriptions (
               id,
               status
             )
@@ -323,23 +323,48 @@ const AgencyBilling = () => {
             </Button>
           </div>
 
-          {/* Stripe Status Banner */}
-          <div className="bg-foreground/5 border border-foreground/10 rounded-lg p-4 flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="p-2 bg-foreground/10 rounded-lg">
-                <CheckCircle2 className="h-5 w-5 text-foreground" />
-              </div>
-              <div>
-                <div className="font-semibold">Stripe Connected</div>
-                <div className="text-sm text-muted-foreground">
-                  Payments are being processed through your Stripe account
+          {/* Status Banners */}
+          <div className="space-y-4">
+            <div className="bg-foreground/5 border border-foreground/10 rounded-lg p-4 flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-foreground/10 rounded-lg">
+                  <CheckCircle2 className="h-5 w-5 text-foreground" />
+                </div>
+                <div>
+                  <div className="font-semibold">Stripe Connected</div>
+                  <div className="text-sm text-muted-foreground">
+                    Payments are being processed through your Stripe account
+                  </div>
                 </div>
               </div>
+              <Button variant="outline" size="sm" className="gap-2">
+                <Settings className="h-4 w-4" />
+                Manage
+              </Button>
             </div>
-            <Button variant="outline" size="sm" className="gap-2">
-              <Settings className="h-4 w-4" />
-              Manage
-            </Button>
+
+            <div className="bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4 flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-blue-100 dark:bg-blue-900/30 rounded-lg">
+                  <AlertCircle className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+                </div>
+                <div>
+                  <div className="font-semibold text-blue-900 dark:text-blue-100">Configure API Key</div>
+                  <div className="text-sm text-blue-700 dark:text-blue-300">
+                    Set up your Claude API key to enable content generation for clients
+                  </div>
+                </div>
+              </div>
+              <Button
+                variant="outline"
+                size="sm"
+                className="gap-2 border-blue-300 dark:border-blue-700 hover:bg-blue-100 dark:hover:bg-blue-900/30"
+                onClick={() => navigate('/agency/api-settings')}
+              >
+                <Settings className="h-4 w-4" />
+                Configure
+              </Button>
+            </div>
           </div>
         </motion.div>
 

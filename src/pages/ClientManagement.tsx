@@ -30,55 +30,6 @@ import {
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 
-// Mock client data - will be replaced with Supabase data
-const mockClients = [
-  {
-    id: 1,
-    name: "Tech Startup Inc",
-    contactEmail: "contact@techstartup.com",
-    status: "active",
-    postsGenerated: 42,
-    lastActive: "2 hours ago",
-    createdAt: "2024-01-15",
-  },
-  {
-    id: 2,
-    name: "Marketing Agency Co",
-    contactEmail: "hello@marketingco.com",
-    status: "active",
-    postsGenerated: 38,
-    lastActive: "5 hours ago",
-    createdAt: "2024-02-01",
-  },
-  {
-    id: 3,
-    name: "E-commerce Store",
-    contactEmail: "support@ecommerce.com",
-    status: "inactive",
-    postsGenerated: 15,
-    lastActive: "3 days ago",
-    createdAt: "2024-03-10",
-  },
-  {
-    id: 4,
-    name: "Local Business LLC",
-    contactEmail: "info@localbiz.com",
-    status: "pending",
-    postsGenerated: 0,
-    lastActive: "Never",
-    createdAt: "2024-03-28",
-  },
-  {
-    id: 5,
-    name: "Creative Studio",
-    contactEmail: "team@creative.studio",
-    status: "active",
-    postsGenerated: 67,
-    lastActive: "1 hour ago",
-    createdAt: "2023-12-20",
-  },
-];
-
 const ClientManagement = () => {
   const navigate = useNavigate();
   const { toast } = useToast();

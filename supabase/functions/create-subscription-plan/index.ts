@@ -138,15 +138,6 @@ serve(async (req) => {
       throw planError;
     }
 
-    // Log activity
-    await supabaseClient
-      .from('activity_logs')
-      .insert({
-        agency_id: agency.id,
-        action_type: 'subscription_plan_created',
-        description: `Created subscription plan: ${name} ($${priceMonthly}/${billingInterval})`,
-      });
-
     return new Response(
       JSON.stringify({
         success: true,
