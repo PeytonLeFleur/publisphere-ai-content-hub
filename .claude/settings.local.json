@@ -11,7 +11,9 @@
       "Bash(npx supabase db push)",
       "Bash(git commit:*)",
       "Bash(git push:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(node -e \"console.log(require(''crypto'').randomBytes(32).toString(''hex''))\")",
+      "Bash(chmod:*)"
     ],
     "deny": [],
     "ask": []
