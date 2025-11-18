@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import {
@@ -14,8 +15,10 @@ import {
   ChevronDown,
   ChevronUp,
   LogOut,
+  BarChart3,
 } from "lucide-react";
 import { fadeInUp, staggerContainer, staggerItem } from "@/lib/animations";
+import { SuperAdminAnalytics } from "@/components/super-admin/SuperAdminAnalytics";
 
 interface Agency {
   id: string;
@@ -38,6 +41,7 @@ const SuperAdmin = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState("analytics");
   const [agencies, setAgencies] = useState<Agency[]>([]);
   const [expandedAgency, setExpandedAgency] = useState<string | null>(null);
   const [agencyClients, setAgencyClients] = useState<Record<string, Client[]>>(
@@ -290,17 +294,36 @@ const SuperAdmin = () => {
           </motion.div>
         </motion.div>
 
-        {/* Agencies List */}
+        {/* Tabs: Analytics & Agencies */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
         >
-          <Card className="p-6">
-            <h2 className="text-2xl font-semibold mb-6 flex items-center gap-2">
-              <Building2 className="h-6 w-6" />
-              Agencies
-            </h2>
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
+            <TabsList className="grid w-full grid-cols-2 max-w-md">
+              <TabsTrigger value="analytics" className="flex items-center gap-2">
+                <BarChart3 className="h-4 w-4" />
+                Analytics
+              </TabsTrigger>
+              <TabsTrigger value="agencies" className="flex items-center gap-2">
+                <Building2 className="h-4 w-4" />
+                Agencies
+              </TabsTrigger>
+            </TabsList>
+
+            {/* Analytics Tab */}
+            <TabsContent value="analytics" className="space-y-6">
+              <SuperAdminAnalytics />
+            </TabsContent>
+
+            {/* Agencies Tab */}
+            <TabsContent value="agencies" className="space-y-6">
+              <Card className="p-6">
+                <h2 className="text-2xl font-semibold mb-6 flex items-center gap-2">
+                  <Building2 className="h-6 w-6" />
+                  Agencies
+                </h2>
 
             {agencies.length === 0 ? (
               <div className="text-center py-12 text-muted-foreground">
@@ -403,7 +426,9 @@ const SuperAdmin = () => {
               </div>
             )}
           </Card>
-        </motion.div>
+        </TabsContent>
+      </Tabs>
+      </motion.div>
       </div>
     </div>
   );
