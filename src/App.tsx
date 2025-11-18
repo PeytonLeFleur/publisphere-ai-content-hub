@@ -38,6 +38,8 @@ const Privacy = lazy(() => import("./pages/Privacy"));
 const VoiceAgents = lazy(() => import("./pages/VoiceAgents"));
 const ClientVoiceAgents = lazy(() => import("./pages/ClientVoiceAgents"));
 const ServicePackages = lazy(() => import("./pages/ServicePackages"));
+const SuperAdminLogin = lazy(() => import("./pages/SuperAdminLogin"));
+const SuperAdmin = lazy(() => import("./pages/SuperAdmin"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
 const queryClient = new QueryClient();
@@ -90,6 +92,8 @@ const App = () => (
             <Route path="/subscription/canceled" element={<SubscriptionCanceled />} />
             <Route path="/terms" element={<Terms />} />
             <Route path="/privacy" element={<Privacy />} />
+            <Route path="/super-admin/login" element={<SuperAdminLogin />} />
+            <Route path="/super-admin" element={<SuperAdmin />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
