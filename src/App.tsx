@@ -37,6 +37,7 @@ const Terms = lazy(() => import("./pages/Terms"));
 const Privacy = lazy(() => import("./pages/Privacy"));
 const VoiceAgents = lazy(() => import("./pages/VoiceAgents"));
 const ClientVoiceAgents = lazy(() => import("./pages/ClientVoiceAgents"));
+const ServicePackages = lazy(() => import("./pages/ServicePackages"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
 const queryClient = new QueryClient();
@@ -72,6 +73,7 @@ const App = () => (
             <Route path="/clients/:id/edit" element={<ClientEdit />} />
             <Route path="/clients/:id/voice-agents" element={<ClientVoiceAgents />} />
             <Route path="/voice-agents" element={<VoiceAgents />} />
+            <Route path="/service-packages" element={<ServicePackages />} />
             <Route path="/generate" element={<ContentGenerator />} />
             <Route path="/content" element={<ContentLibrary />} />
             <Route path="/content/:id" element={<ContentDetail />} />
