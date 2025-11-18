@@ -35,6 +35,8 @@ const SubscriptionSuccess = lazy(() => import("./pages/SubscriptionSuccess"));
 const SubscriptionCanceled = lazy(() => import("./pages/SubscriptionCanceled"));
 const Terms = lazy(() => import("./pages/Terms"));
 const Privacy = lazy(() => import("./pages/Privacy"));
+const VoiceAgents = lazy(() => import("./pages/VoiceAgents"));
+const ClientVoiceAgents = lazy(() => import("./pages/ClientVoiceAgents"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
 const queryClient = new QueryClient();
@@ -68,6 +70,8 @@ const App = () => (
             <Route path="/clients/new" element={<ClientNew />} />
             <Route path="/clients/:id" element={<ClientView />} />
             <Route path="/clients/:id/edit" element={<ClientEdit />} />
+            <Route path="/clients/:id/voice-agents" element={<ClientVoiceAgents />} />
+            <Route path="/voice-agents" element={<VoiceAgents />} />
             <Route path="/generate" element={<ContentGenerator />} />
             <Route path="/content" element={<ContentLibrary />} />
             <Route path="/content/:id" element={<ContentDetail />} />
