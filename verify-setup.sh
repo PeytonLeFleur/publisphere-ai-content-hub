@@ -69,8 +69,8 @@ echo "📁 Checking project files..."
 
 # 4. Check migration files exist
 MIGRATIONS=(
-    "supabase/migrations/20251117000000_initial_schema.sql"
-    "supabase/migrations/20251117000001_add_voice_agents.sql"
+    "supabase/migrations/20251118000000_add_voice_agents.sql"
+    "supabase/migrations/20251118000001_create_knowledge_base_storage.sql"
     "supabase/migrations/20251118000002_add_service_packages.sql"
     "supabase/migrations/20251118000003_add_super_admin.sql"
     "supabase/migrations/20251118000004_add_super_admin_analytics.sql"
